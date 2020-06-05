@@ -1,0 +1,50 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'index' %}" style="font-family:Jazz LET;">COVID-19 DASHBOARD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto mx-2">
+
+
+      <li class="mx-2 py-2">
+        <div class="dropdown show">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Update Data
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'home_data' %}">home_data</a>
+            <a class="dropdown-item" href="{% url 'home' %}">home</a>
+            <a class="dropdown-item" href="{% url 'india_home' %}">india_home</a> 
+            <a class="dropdown-item" href="{% url 'home_global' %}">home_global</a>        
+          </div>
+        </div>
+      </li>
+
+
+  
+      <li class="mx-2 py-2">
+        <div class="dropdown show" >
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          List of Countries
+        </a>
+         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="dropdown" style="height: 400px; overflow: auto;position: absolute;">
+        </div>
+        </div>
+      </li>
+      
+      {%for i in direct_links %}
+      <li class="mx-2 py-2">
+        <a class="btn btn-secondary" href="{% url 'make_graph' i %}" role="button">
+          {{i}}
+        </a>
+      </li>
+      {%endfor%}
+
+
+    </ul>
+  </div>
+</nav>

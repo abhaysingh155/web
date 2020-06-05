@@ -1,0 +1,122 @@
+{% extends 'mysite/index.html' %}
+
+{% block content %}
+<style type="text/css">
+  .zoom:hover {
+  transform: scale(.9);
+}
+</style>
+
+<div class="container-fluid py-3">
+
+  <h1 style="text-align: center; font-family: sans-serif; text-shadow:2px 2px 5px red;font-weight: bold; font-family:impact;">COVID-19 UPDATES</h1>
+  <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+  <div class="row py-3">
+    <div class="col-6 col-sm-6 col-md-6 col-lg-3 py-2" style="position: relative">
+      <div class="badge-pill zoom text-white bg-dark">
+          <h5 style="text-align: center; font-family: Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-stethoscope mr-2 p-1" aria-hidden="true" style="font-size: 24px;"></i><span class="d-inline-block small">NEW CASES</span></h5>
+      </div>
+      <div class=" badge-pill zoom" style="background-color: #ed4f24">
+          <p><h5 class="count py-1" style="text-align: center; font-family: Lucida Bright">{{today_confirmed}}</h5></p>
+      </div>
+    </div>
+
+    
+    <div class="col-6 col-sm-6 col-md-6 col-lg-3 py-2" style="position: relative">
+        <div class="badge-pill zoom text-white bg-dark">
+          <h5 style="text-align: center; font-family:Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-stethoscope mr-2  p-1" aria-hidden="true"  style="font-size: 24px;"></i><span class="d-inline-block small">CASES</span></h5>
+      </div>
+      <div class="badge-pill zoom " style="background-color: #ed4f24">
+          <p><h5 class="count py-1" style="text-align: center; font-family: Lucida Bright">{{total_confirmed}}</h5></p>
+      </div>
+    </div>
+
+    <div class="col-6 col-sm-6 col-md-6 col-lg-3 py-2" style="position: relative">
+      <div class="badge-pill zoom text-white bg-dark">
+          <h5 style="text-align: center; font-family: Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-heartbeat mr-2 p-1" aria-hidden="true" style="font-size: 24px;"></i><span class="d-inline-block small">RECOVERED</span></h5>
+      </div>
+        <div class="badge-pill zoom " style="background-color: #68f235 ">
+          <p><h5 class="count py-1" style="text-align: center;  font-family: Lucida Bright">{{total_recovered}}</h5></p>
+      </div>
+    </div>
+
+    <div class="col-6 col-sm-6 col-md-6 col-lg-3 py-2" style="position: relative">
+      <div class="badge-pill zoom text-white bg-dark">
+        <h5 style="text-align: center; font-family: Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-ambulance mr-2 p-1" aria-hidden="true" style="font-size: 24px;"></i><span class="d-inline-block small">CASUALTY</span></h5>
+      </div>
+      <div class="badge-pill zoom " style="background-color: #faec2d ;">
+          <p><h5 class="count py-1" style="text-align: center; font-family: Lucida Bright">{{total_deaths}}</h5></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="myChart" class="chart--container py-3" style="width: 100%;
+  height: 500px;"></div>
+
+
+</div>
+  <script>
+
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; // INIT
+    // -----------------------------
+    // Define Module Location
+    zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["bab21d016b2dadc18447d2a055f061e3"];
+
+    // must load maps and first map we are going to render
+    zingchart.loadModules('maps,maps-world-countries');
+
+    // initial config for first chart
+    var myConfig = {
+      'background-color':"#2f615f",
+      shapes: [{
+        type: 'zingchart.maps',
+        options: {
+          name: 'world.countries',
+          style: { //stlye all countries 
+            backgroundColor: '#47d159',
+            label: {
+              visible: false
+            },
+            hoverState: {
+              alpha: .32,
+              backgroundColor: "#0d3615", 
+            },
+            items: { //include specific shape regions with unique styles
+
+            {% for k, v in D.items %}
+              {{v.1}}: {
+                backgroundColor: '#47d159',
+                cursor: 'pointer',
+                label: {
+                  visible: false,
+                  fontColor: '#47d159'
+                },
+                tooltip: {
+                  text: "{{v.0}} -> {{v.2}} CASES",
+                }
+              },
+            {% endfor %}
+
+
+            }
+          }
+        }
+      }]
+    };
+
+    zingchart.render({
+      id: 'myChart',
+      data: myConfig,
+    });
+
+  </script>
+
+{% endblock %}
+
+
+
+
+
+

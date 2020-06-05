@@ -1,0 +1,553 @@
+{% extends 'mysite/index.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/create_graph.css' %}">
+<style type="text/css">
+	.zoom:hover {
+  transform: scale(.9);
+}
+</style>
+
+<div class="container-fluid py-3">
+  <h1 style="text-align: center; font-family: sans-serif; text-shadow:2px 2px 5px red;font-weight: bold; font-family:impact;">COVID-19 UPDATES</h1>
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+	<div class="row py-3">
+		<div class="col-6 col-sm-6 col-md-6 col-lg-3 pt-lg-3 zoom" style="position: relative;" >
+			<div class="col-6 col-sm-6 col-md-6 col-lg-6 mx-auto">
+			    <img src="{{ name_it.country_pic}}" alt="Image Not Available" class="img-thumbnail"> 
+			</div>
+		</div>
+		
+		<div class="col-6 col-sm-6 col-md-6 col-lg-3" style="position: relative">
+            <div class="col-sm badge-pill zoom text-white bg-dark">
+	              <p><h5 style="text-align: center; font-family: Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-globe fa-fw fa-spin mr-2 p-1" aria-hidden="true"></i><span class="d-inline-block small">COUNTRY</span></h5></p>
+			</div>
+			<div class="col-sm badge-pill zoom " style="background-color: #faec2d ;">
+			    <p><h5 class=" py-1" style="text-align: center;font-family: georgia;">{{country}}</h5></p>
+			</div>
+		</div>
+		
+		<div class="col-6 col-sm-6 col-md-6 col-lg-3" style="position: relative">
+    		<div class="col-sm badge-pill zoom text-white bg-dark">
+			    <p><h5 style="text-align: center; font-family: Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-stethoscope mr-2 p-1" aria-hidden="true"></i><span class="d-inline-block small">CASES</span></h5></p>
+			</div>
+			<div class="col-sm badge-pill zoom" style="background-color: #ed4f24">
+			    <p ><h5 class="count  py-1" style="text-align: center;font-family: Lucida Bright">{{total_confirmed}}</h5></p>
+			</div>
+		</div>
+
+		<div class="col-6 col-sm-6 col-md-6 col-lg-3 " style="position: relative">
+			<div class="col-sm badge-pill zoom text-white bg-dark">
+			    <p><h5 style="text-align: center; font-family: Franklin Gothic Medium; font-size: 26px;"><i class="fa fa-heartbeat mr-2 p-1" aria-hidden="true"></i><span class="d-inline-block small">RECOVERED</span></h5></p>
+			</div>
+ 		    <div class="col-sm badge-pill zoom " style="background-color: #68f235 ">
+			    <p ><h5 class="count  py-1" style="text-align: center;font-family: Lucida Bright">{{total_recovered}}</h5></p>
+			</div>
+		</div>
+    </div>
+   
+
+	<div class="container-fluid py-4 my-2">
+	<div id="myChart" class="chart--container"></div>
+    </div>
+
+{% if country == 'India' %}
+	<div class="container-fluid">
+	<div id="myChartIndia" class="chart--container" style="object-fit: contain;">
+    </div>
+    </div>
+{% endif %}
+
+
+	<script>
+
+		var state={
+			"items" : [],
+		    "values": [],
+		}
+		var objid = "{{country}}"
+		var dataURL = `/chart_data/${objid}/`
+        setInterval($.ajax({
+        	method:'GET',
+        	url:dataURL,
+        	success:function(response){
+        		for(var i in response){
+        			
+        			var value = Object.values(response[i])
+
+        			state.values.push(value)
+        		}
+        		buildChart()
+        		buildIndiaChart()
+        	}
+
+
+        }), 1000 * 60 * X);
+
+        function buildChart(){
+		    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; 
+		    let chartConfig = {
+		      type: 'area',
+		      backgroundColor: '#2c6370',
+		      title: {
+		        text: 'COVID-19 UPDATES',
+		        adjustLayout: true,
+		        marginTop: '7px',
+		        fontColor: '#E3E3E5'
+		      },
+		      legend: {
+		        align: 'center',
+		        backgroundColor: 'none',
+		        borderWidth: '0px',
+		        item: {
+		          cursor: 'hand',
+		          fontColor: '#E3E3E5'
+		        },
+		        marker: {
+		          type: 'circle',
+		          borderWidth: '0px',
+		          cursor: 'hand'
+		        },
+		        verticalAlign: 'top'
+		      },
+		      plot: {
+		        aspect: 'spline',
+		        lineWidth: '6px',
+		        marker: {
+		          borderWidth: '0px',
+		          size: '10px'
+		        },
+		        plotarea: {
+		          margin: 'dynamic 70'
+		        },
+		      },  
+		      scaleX: {
+		        item: {
+		          fontColor: '#E3E3E5'
+		        },
+		        values: state.values[0],
+		        zooming: true,
+		        zoomTo: [0, 15]
+		      },
+		      crosshairX: {
+		        marker: {
+		          alpha: 0.5,
+		          size: '7px'
+		        },
+		        plotLabel: {
+		          borderRadius: '3px',
+		          multiple: true
+		        },
+		        scaleLabel: {
+		          backgroundColor: '#53535e',
+		          borderRadius: '3px'
+		        }
+		      },
+		      tooltip: {
+		        borderRadius: '3px',
+		        borderWidth: '0px'
+		      },
+		      series: [{
+		          values: state.values[1],
+				  text: "NEW CASES",
+		          lineColor: '#E34247',
+		          marker: {
+		            backgroundColor: '#E34247'
+		          }
+		        },
+		        {
+		          values: state.values[2],
+				  text: "TOTAL DEATHS",
+		          lineColor: '#FEB32E',
+		          marker: {
+		            backgroundColor: '#FEB32E'
+		          }
+		        },
+		        {
+		          values: state.values[3],
+				  text: "TOTAL RECOVERED",
+		          lineColor: '#FEB32E',
+		          marker: {
+		            backgroundColor: '#FEB32E'
+		          }
+		        },
+
+		      ]
+		    };
+
+		    // RENDER CHARTS
+		    // -----------------------------
+		    zingchart.render({
+		      id: 'myChart',
+		      data: chartConfig,
+		      height: '100%',
+		      width: '100%',
+		    });
+        }
+
+        function buildIndiaChart(){
+            ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+            let chartConfig = {
+              shapes: [{
+                  type: 'zingchart.maps',
+                  options: {
+                    bbox: [67.177, 36.494, 98.403, 6.965], // get bbox from zingchart.maps.getItemInfo('world-countries','ind');
+                    ignore: ['IND'], // ignore India because we are rendering a more specific India map below
+                    name: 'world.countries',
+                    panning: false, // turn of zooming. Doesn't work with bounding box
+                    style: {
+                      tooltip: {
+                        borderColor: '#000',
+                        borderWidth: '2px',
+                        fontSize: '18px'
+                      },
+                      controls: {
+                        visible: false // turn of zooming. Doesn't work with bounding box
+                      },
+                      hoverState: {
+                        alpha: .28
+                      }
+                    },
+                    zooming: false // turn of zooming. Doesn't work with bounding box
+                  }
+                },
+                {
+                  type: 'zingchart.maps',
+                  options: {
+                    name: 'ind',
+                    panning: false, // turn of zooming. Doesn't work with bounding box
+                    zooming: false,
+                    scrolling: false,
+                    style: {
+                      tooltip: {
+                        borderColor: '#000',
+                        borderWidth: '2px',
+                        fontSize: '18px'
+                      },
+                      borderColor: '#000',
+                      borderWidth: '2px',
+                      controls: {
+                        visible: false, // turn of zooming. Doesn't work with bounding box
+        
+                      },
+                      hoverState: {
+                        alpha: .28
+                      },
+                      items: {
+                        KA: {
+                          tooltip: {
+                            text: 'Karnataka -> {{state_data.Karnataka}} CASES',
+                            backgroundColor: '#6dd1f2'
+                          },
+                          backgroundColor: '#6dd1f2',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        MH: {
+                          tooltip: {
+                            text: 'Maharashtra -> {{state_data.Maharashtra}} CASES',
+                            backgroundColor: '#ff9800'
+                          },
+                          backgroundColor: '#ff9800',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        TL: {
+                          tooltip: {
+                            text: 'Telangana -> {{state_data.Telangana}} CASES',
+                            backgroundColor: '#00AE4D'
+                          },
+                          backgroundColor: '#00AE4D',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        RJ: {
+                          tooltip: {
+                            text: 'Rajasthan -> {{state_data.Rajasthan}} CASES',
+                            backgroundColor: '#00AE4D'
+                          },
+                          backgroundColor: '#00AE4D',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        HP: {
+                          tooltip: {
+                            text: 'Himachal Pradesh -> {{state_data.HimachalPradesh}} CASES',
+                            backgroundColor: '#72a0b5'
+                          },
+                          backgroundColor: '#72a0b5',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        UP: {
+                          tooltip: {
+                            text: 'Uttar Pradesh -> {{state_data.UttarPradesh}} CASES',
+                            backgroundColor: '#edd940'
+                          },
+                          backgroundColor: '#edd940',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        HR: {
+                          tooltip: {
+                            text: 'Haryana -> {{state_data.Haryana}} CASES',
+                            backgroundColor: '#839689'
+                          },
+                          backgroundColor: '#839689',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        JK: {
+                          tooltip: {
+                            text: 'Jammu and Kashmir -> {{state_data.JammuandKashmir}} CASES',
+                            backgroundColor: '#0aced1'
+                          },
+                          backgroundColor: '#0aced1',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        GJ: {
+                          tooltip: {
+                            text: 'Gujarat -> {{state_data.Gujarat}} CASES',
+                            backgroundColor: '#d19bc6'
+                          },
+                          backgroundColor: '#d19bc6',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        BR: {
+                          tooltip: {
+                            text: 'Bihar -> {{state_data.Bihar}} CASES',
+                            backgroundColor: '#7d7b04'
+                          },
+                          backgroundColor: '#7d7b04',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        MP: {
+                          tooltip: {
+                            text: 'Madhya Pradesh -> {{state_data.MadhyaPradesh}} CASES',
+                            backgroundColor: '#0ddba1'
+                          },
+                          backgroundColor: '#0ddba1',
+                          label: {
+                            visible: true
+                          }
+                        },
+                        JH: {
+                          tooltip: {
+                            text: 'Jharkhand -> {{state_data.Jharkhand}} CASES',
+                            backgroundColor: '#84faee'
+                          },
+                          backgroundColor: '#84faee',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                 
+                        CT: {
+                          tooltip: {
+                            text: 'Chhattisgarh -> {{state_data.Chhattisgarh}} CASES',
+                            backgroundColor: '#d1aed4'
+                          },
+                          backgroundColor: '#d1aed4',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                    
+                        OR: {
+                          tooltip: {
+                            text: 'Odisha -> {{state_data.Odisha}} CASES',
+                            backgroundColor: '#c7fc08'
+                          },
+                          backgroundColor: '#c7fc08',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        PB: {
+                          tooltip: {
+                            text: 'Punjab -> {{state_data.Punjab}} CASES',
+                            backgroundColor: '#fcf003'
+                          },
+                          backgroundColor: '#fcf003',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+
+                        KL: {
+                          tooltip: {
+                            text: 'Kerala -> {{state_data.Kerala}} CASES',
+                            backgroundColor: '#edea82'
+                          },
+                          backgroundColor: '#edea82',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+
+                        AS: {
+                          tooltip: {
+                            text: 'Assam -> {{state_data.Assam}} CASES',
+                            backgroundColor: '#ff7605'
+                          },
+                          backgroundColor: '#ff7605',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        WB: {
+                          tooltip: {
+                            text: 'West Bengal -> {{state_data.WestBengal}} CASES',
+                            backgroundColor: '#08fc48'
+                          },
+                          backgroundColor: '#08fc48',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        AP: {
+                          tooltip: {
+                            text: 'Andhra Pradesh -> {{state_data.AndhraPradesh}} CASES',
+                            backgroundColor: '#fcf808'
+                          },
+                          backgroundColor: '#fcf808',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        GA: {
+                          tooltip: {
+                            text: 'Goa -> {{state_data.Goa}} CASES',
+                            backgroundColor: '#032654'
+                          },
+                          backgroundColor: '#032654',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        AR: {
+                          tooltip: {
+                            text: 'Arunachal Pradesh -> {{state_data.ArunachalPradesh}} CASES',
+                            backgroundColor: '#5896e8'
+                          },
+                          backgroundColor: '#5896e8',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        MZ: {
+                          tooltip: {
+                            text: 'Mizoram -> {{state_data.Mizoram}} CASES',
+                            backgroundColor: '#655e69'
+                          },
+                          backgroundColor: '#655e69',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        SK: {
+                          tooltip: {
+                            text: 'Sikkim -> {{state_data.Sikkim}} CASES',
+                            backgroundColor: '#c4af0a'
+                          },
+                          backgroundColor: '#c4af0a',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        TR: {
+                          tooltip: {
+                            text: 'Tripura -> {{state_data.Tripura}} CASES',
+                            backgroundColor: '#85c5f2'
+                          },
+                          backgroundColor: '#85c5f2',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        MN: {
+                          tooltip: {
+                            text: 'Manipur -> {{state_data.Manipur}} CASES',
+                            backgroundColor: '#23fa5c'
+                          },
+                          backgroundColor: '#23fa5c',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        NL: {
+                          tooltip: {
+                            text: 'Nagaland -> {{state_data.Nagaland}} CASES',
+                            backgroundColor: '#83e69d'
+                          },
+                          backgroundColor: '#83e69d',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        ML: {
+                          tooltip: {
+                            text: 'Meghalaya -> {{state_data.Meghalaya}} CASES',
+                            backgroundColor: '#08fc48'
+                          },
+                          backgroundColor: '#08fc48',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        UT: {
+                          tooltip: {
+                            text: 'Uttarakhand -> {{state_data.Uttarakhand}} CASES',
+                            backgroundColor: '#04637d'
+                          },
+                          backgroundColor: '#04637d',
+                          label: {
+                            visible: true
+                          }
+                        },                                                                  
+                        TN: {
+                          tooltip: {
+                            text: 'Tamil Nadu -> {{state_data.TamilNadu}} CASES',
+                            backgroundColor: '#00bcd4'
+                          },
+                          backgroundColor: '#00bcd4',
+                          label: {
+                            visible: true
+                          }
+                        }
+                      },
+                      label: { // text displaying. Like valueBox
+                        fontSize: '15px',
+                        visible: false
+                      }
+                    },
+                    zooming: false // turn of zooming. Doesn't work with bounding box
+                  }
+                }
+              ]
+            }
+        
+            zingchart.loadModules('maps,maps-ind,maps-world-countries');
+            zingchart.render({
+              id: 'myChartIndia',
+              data: chartConfig,
+              height: '100%',
+              width: '100%',
+            });
+            }
+
+    </script>
+
+{% endblock %}
