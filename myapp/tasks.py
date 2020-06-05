@@ -6,7 +6,7 @@ from .views import india_home, home, home_global
 
 logger = get_task_logger(__name__)
 
-@periodic_task(run_every=(crontab(minute='*/15')), name="get_api_data", ignore_result=True)
+@periodic_task(run_every=(crontab(minute=0, hour='*/3')), name="get_api_data", ignore_result=True)
 def get_api_data():
 	"""
     Call rest API for the data
@@ -17,7 +17,7 @@ def get_api_data():
 	india_home()
 	print("India Data has taken from API")
 	logger.info("India Data has taken from API")
-	time.sleep(500)
+	time.sleep(180)
 	home()
 	print("All Countries Data has taken from API")
 	logger.info("All Countries Data has taken from API")
