@@ -83,7 +83,7 @@ def home_data(request):
 		print("geodata----------------->",created)
 	return render(request, "mysite/index.html")
 
-def india_home(request):
+def india_home():
 	response = requests.get('https://api.covid19india.org/data.json')
 	geodata = response.json()
 	geodata = geodata["statewise"]
@@ -95,9 +95,9 @@ def india_home(request):
 			state = value["state"],
 			updated_on = timezone.now()
 			)
-	return render(request, "mysite/index.html")		
+		print("india_home-----------------> \n",created)
 
-def home_global(request):
+def home_global():
 	response = requests.get('https://api.covid19api.com/summary')
 	geodata = response.json()
 	geodata_global = geodata["Global"]
@@ -110,9 +110,9 @@ def home_global(request):
 		worlddata_total_confirmed = geodata_global["TotalConfirmed"],
 		worlddata_total_recovered = geodata_global["TotalRecovered"],
 	)
-	return render(request, "mysite/index.html")
-
-def home(request):
+	print("home_global-----------------> \n",created)
+	
+def home():
 	response = requests.get('https://api.covid19api.com/summary')
 	geodata = response.json()
 	geodata = geodata["Countries"]
@@ -126,8 +126,8 @@ def home(request):
 			total_confirmed = value["TotalConfirmed"],
 			total_recovered = value["TotalRecovered"],
 			)
-	return render(request, "mysite/index.html")
-	
+		print("home-----------------> \n",created)
+		
 def list_of_countries(request):
 	country_name=CountriesData.objects.values('country_name')
 	total= country_name.count()
