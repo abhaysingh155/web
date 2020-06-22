@@ -2,7 +2,7 @@ from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 from celery.utils.log import get_task_logger
 import time
-from .views import india_home, home, home_global
+from .views import india_home, home, home_global, home_data
 
 logger = get_task_logger(__name__)
 
@@ -21,4 +21,7 @@ def get_api_data():
 	home()
 	print("All Countries Data has taken from API")
 	logger.info("All Countries Data has taken from API")
+    home_data()
+	print("All Countries Flags Data has taken from API")
+	logger.info("All Countries Flags Data has taken from API")
 

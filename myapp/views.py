@@ -70,7 +70,7 @@ def index(request):
 														  "direct_links":direct_links,
 														  })
 
-def home_data(request):
+def home_data():
 	response = requests.get('https://restcountries.eu/rest/v2/all')
 	geodata = response.json()
 	print("geodata----------------->",geodata) 
@@ -81,7 +81,6 @@ def home_data(request):
 		alpha3Code =  value["alpha3Code"]
 		)
 		print("geodata----------------->",created)
-	return render(request, "mysite/index.html")
 
 def india_home():
 	response = requests.get('https://api.covid19india.org/data.json')
