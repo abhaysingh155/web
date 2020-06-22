@@ -73,14 +73,13 @@ def index(request):
 def home_data():
 	response = requests.get('https://restcountries.eu/rest/v2/all')
 	geodata = response.json()
-	print("geodata----------------->",geodata) 
 	for value in geodata:
 		obj,created=CountriesName.objects.get_or_create(
 		name = value["name"],
 		country_pic = value["flag"],
 		alpha3Code =  value["alpha3Code"]
 		)
-		print("geodata----------------->",created)
+#		print("geodata----------------->",created)
 
 def india_home():
 	response = requests.get('https://api.covid19india.org/data.json')
@@ -94,7 +93,7 @@ def india_home():
 			state = value["state"],
 			updated_on = timezone.now()
 			)
-		print("india_home-----------------> \n",created)
+#		print("india_home-----------------> \n",created)
 
 def home_global():
 	response = requests.get('https://api.covid19api.com/summary')
@@ -109,7 +108,7 @@ def home_global():
 		worlddata_total_confirmed = geodata_global["TotalConfirmed"],
 		worlddata_total_recovered = geodata_global["TotalRecovered"],
 	)
-	print("home_global-----------------> \n",created)
+#	print("home_global-----------------> \n",created)
 	
 def home():
 	response = requests.get('https://api.covid19api.com/summary')
@@ -125,7 +124,7 @@ def home():
 			total_confirmed = value["TotalConfirmed"],
 			total_recovered = value["TotalRecovered"],
 			)
-		print("home-----------------> \n",created)
+#		print("home-----------------> \n",created)
 		
 def list_of_countries(request):
 	country_name=CountriesData.objects.values('country_name')

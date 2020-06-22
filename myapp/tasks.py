@@ -12,16 +12,13 @@ def get_api_data():
     Call rest API for the data
     """
     home_global()
-    print("World Data has taken from API")
     logger.info("World Data has taken from API")
     india_home()
-    print("India Data has taken from API")
     logger.info("India Data has taken from API")
     time.sleep(180)
     home()
-    print("All Countries Data has taken from API")
     logger.info("All Countries Data has taken from API")
-    home_data()
-    print("All Countries Flags Data has taken from API")
-    logger.info("All Countries Flags Data has taken from API")
+#    home_data()
+#    print("All Countries Flags Data has taken from API")
+#    logger.info("All Countries Flags Data has taken from API")
 
