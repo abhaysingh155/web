@@ -82,6 +82,7 @@ def home_data():
 #		print("geodata----------------->",created)
 
 def india_home():
+    StateData.objects.all().delete()
 	response = requests.get('https://api.covid19india.org/data.json')
 	geodata = response.json()
 	geodata = geodata["statewise"]
@@ -96,6 +97,7 @@ def india_home():
 #		print("india_home-----------------> \n",created)
 
 def home_global():
+    WorldData.objects.all().delete()
 	response = requests.get('https://api.covid19api.com/summary')
 	geodata = response.json()
 	geodata_global = geodata["Global"]
