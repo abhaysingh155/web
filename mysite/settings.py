@@ -137,6 +137,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/')
 
 # CELERY STUFF
-CELERY_BROKER_URL = 'redis://h:pcc0761d9ca235780aecb17c8e97de19676a57534df1096656314d12b14a42dc1@ec2-54-159-207-93.compute-1.amazonaws.com:26069'
+CELERY_BROKER_URL = 'redis://h:pcc0761d9ca235780aecb17c8e97de19676a57534df1096656314d12b14a42dc1@ec2-54-165-127-148.compute-1.amazonaws.com:30039'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json' 
