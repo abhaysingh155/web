@@ -48,9 +48,21 @@
     </div>
    
 
-	<div class="container-fluid py-4 my-2">
-	<div id="myChart" class="chart--container"></div>
+  <div class="row py-3 my-2">
+
+	<div class="container-fluid col-6 col-sm-6 col-md-6 col-lg-4 py-3">
+	<div id="myChart_total_recovered" class="chart--container"></div>
     </div>
+
+  <div class="container-fluid col-6 col-sm-6 col-md-6 col-lg-4 py-3">
+  <div id="myChart_new_cases" class="chart--container"></div>
+    </div>
+
+  <div class="container-fluid col-6 col-sm-6 col-md-6 col-lg-4 py-3">
+  <div id="myChart_total_deaths" class="chart--container"></div>
+    </div> 
+
+  </div>         
 
 {% if country == 'India' %}
 	<div class="container-fluid">
@@ -78,113 +90,267 @@
 
         			state.values.push(value)
         		}
-        		buildChart()
-        		buildIndiaChart()
+            console.log(state)
+        		total_recovered_Chart()
+            new_cases_Chart()
+            total_deaths_Chart()
+            buildIndiaChart()
         	}
 
 
         }), 1000 * 60 * X);
 
-        function buildChart(){
-		    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; 
-		    let chartConfig = {
-		      type: 'area',
-		      backgroundColor: '#2c6370',
-		      title: {
-		        text: 'COVID-19 UPDATES',
-		        adjustLayout: true,
-		        marginTop: '7px',
-		        fontColor: '#E3E3E5'
-		      },
-		      legend: {
-		        align: 'center',
-		        backgroundColor: 'none',
-		        borderWidth: '0px',
-		        item: {
-		          cursor: 'hand',
-		          fontColor: '#E3E3E5'
-		        },
-		        marker: {
-		          type: 'circle',
-		          borderWidth: '0px',
-		          cursor: 'hand'
-		        },
-		        verticalAlign: 'top'
-		      },
-		      plot: {
-		        aspect: 'spline',
-		        lineWidth: '6px',
-		        marker: {
-		          borderWidth: '0px',
-		          size: '10px'
-		        },
-		        plotarea: {
-		          margin: 'dynamic 70'
-		        },
-		      },  
-		      scaleX: {
-		        item: {
-		          fontColor: '#E3E3E5'
-		        },
-		        values: state.values[0],
-		        zooming: true,
-		        zoomTo: [0, 15]
-		      },
-		      crosshairX: {
-		        marker: {
-		          alpha: 0.5,
-		          size: '7px'
-		        },
-		        plotLabel: {
-		          borderRadius: '3px',
-		          multiple: true
-		        },
-		        scaleLabel: {
-		          backgroundColor: '#53535e',
-		          borderRadius: '3px'
-		        }
-		      },
-		      tooltip: {
-		        borderRadius: '3px',
-		        borderWidth: '0px'
-		      },
-		      series: [{
-		          values: state.values[1],
-				  text: "NEW CASES",
-		          lineColor: '#E34247',
-		          marker: {
-		            backgroundColor: '#E34247'
-		          }
-		        },
-		        {
-		          values: state.values[2],
-				  text: "TOTAL DEATHS",
-		          lineColor: '#FEB32E',
-		          marker: {
-		            backgroundColor: '#FEB32E'
-		          }
-		        },
-		        {
-		          values: state.values[3],
-				  text: "TOTAL RECOVERED",
-		          lineColor: '#272adb',
-		          marker: {
-		            backgroundColor: '#272adb'
-		          }
-		        },
+        function total_recovered_Chart(){
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; 
+        let chartConfig = {
+          type: 'area',
+          backgroundColor: '#2c6370',
+          title: {
+            text: 'TOTAL RECOVERED',
+            adjustLayout: true,
+            marginTop: '7px',
+            fontColor: '#E3E3E5'
+          },
+          legend: {
+            align: 'center',
+            backgroundColor: 'none',
+            borderWidth: '0px',
+            item: {
+              cursor: 'hand',
+              fontColor: '#E3E3E5'
+            },
+            marker: {
+              type: 'circle',
+              borderWidth: '0px',
+              cursor: 'hand'
+            },
+            verticalAlign: 'top'
+          },
+          plot: {
+            aspect: 'spline',
+            lineWidth: '6px',
+            marker: {
+              borderWidth: '0px',
+              size: '10px'
+            },
+            plotarea: {
+              margin: 'dynamic 70'
+            },
+          },  
+          scaleX: {
+            item: {
+              fontColor: '#E3E3E5'
+            },
+            values: state.values[0],
+            zooming: true,
+            zoomTo: [0, 15]
+          },
+          crosshairX: {
+            marker: {
+              alpha: 0.5,
+              size: '7px'
+            },
+            plotLabel: {
+              borderRadius: '3px',
+              multiple: true
+            },
+            scaleLabel: {
+              backgroundColor: '#53535e',
+              borderRadius: '3px'
+            }
+          },
+          tooltip: {
+            borderRadius: '3px',
+            borderWidth: '0px'
+          },
+          series: [{
+              values: state.values[3],
+          text: "TOTAL RECOVERED",
+              lineColor: '#272adb',
+              marker: {
+                backgroundColor: '#272adb'
+              }
+            },
+          ]
+        };
 
-		      ]
-		    };
-
-		    // RENDER CHARTS
-		    // -----------------------------
-		    zingchart.render({
-		      id: 'myChart',
-		      data: chartConfig,
-		      height: '100%',
-		      width: '100%',
-		    });
+        // RENDER CHARTS
+        // -----------------------------
+        zingchart.render({
+          id: 'myChart_total_recovered',
+          data: chartConfig,
+          height: '100%',
+          width: '100%',
+        });
         }
+
+        function new_cases_Chart(){
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; 
+        let chartConfig = {
+          type: 'area',
+          backgroundColor: '#2c6370',
+          title: {
+            text: 'NEW CASES',
+            adjustLayout: true,
+            marginTop: '7px',
+            fontColor: '#E3E3E5'
+          },
+          legend: {
+            align: 'center',
+            backgroundColor: 'none',
+            borderWidth: '0px',
+            item: {
+              cursor: 'hand',
+              fontColor: '#E3E3E5'
+            },
+            marker: {
+              type: 'circle',
+              borderWidth: '0px',
+              cursor: 'hand'
+            },
+            verticalAlign: 'top'
+          },
+          plot: {
+            aspect: 'spline',
+            lineWidth: '6px',
+            marker: {
+              borderWidth: '0px',
+              size: '10px'
+            },
+            plotarea: {
+              margin: 'dynamic 70'
+            },
+          },  
+          scaleX: {
+            item: {
+              fontColor: '#E3E3E5'
+            },
+            values: state.values[0],
+            zooming: true,
+            zoomTo: [0, 15]
+          },
+          crosshairX: {
+            marker: {
+              alpha: 0.5,
+              size: '7px'
+            },
+            plotLabel: {
+              borderRadius: '3px',
+              multiple: true
+            },
+            scaleLabel: {
+              backgroundColor: '#53535e',
+              borderRadius: '3px'
+            }
+          },
+          tooltip: {
+            borderRadius: '3px',
+            borderWidth: '0px'
+          },
+          series: [{
+              values: state.values[1],
+          text: "NEW CASES",
+              lineColor: '#E34247',
+              marker: {
+                backgroundColor: '#E34247'
+              }
+            },
+          ]
+        };
+
+        // RENDER CHARTS
+        // -----------------------------
+        zingchart.render({
+          id: 'myChart_new_cases',
+          data: chartConfig,
+          height: '100%',
+          width: '100%',
+        });
+        }
+
+        function total_deaths_Chart(){
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; 
+        let chartConfig = {
+          type: 'area',
+          backgroundColor: '#2c6370',
+          title: {
+            text: 'TOTAL DEATHS',
+            adjustLayout: true,
+            marginTop: '7px',
+            fontColor: '#E3E3E5'
+          },
+          legend: {
+            align: 'center',
+            backgroundColor: 'none',
+            borderWidth: '0px',
+            item: {
+              cursor: 'hand',
+              fontColor: '#E3E3E5'
+            },
+            marker: {
+              type: 'circle',
+              borderWidth: '0px',
+              cursor: 'hand'
+            },
+            verticalAlign: 'top'
+          },
+          plot: {
+            aspect: 'spline',
+            lineWidth: '6px',
+            marker: {
+              borderWidth: '0px',
+              size: '10px'
+            },
+            plotarea: {
+              margin: 'dynamic 70'
+            },
+          },  
+          scaleX: {
+            item: {
+              fontColor: '#E3E3E5'
+            },
+            values: state.values[0],
+            zooming: true,
+            zoomTo: [0, 15]
+          },
+          crosshairX: {
+            marker: {
+              alpha: 0.5,
+              size: '7px'
+            },
+            plotLabel: {
+              borderRadius: '3px',
+              multiple: true
+            },
+            scaleLabel: {
+              backgroundColor: '#53535e',
+              borderRadius: '3px'
+            }
+          },
+          tooltip: {
+            borderRadius: '3px',
+            borderWidth: '0px'
+          },
+          series: [{
+              values: state.values[2],
+          text: "TOTAL DEATHS",
+              lineColor: '#FEB32E',
+              marker: {
+                backgroundColor: '#FEB32E'
+              }
+            },
+          ]
+        };
+
+        // RENDER CHARTS
+        // -----------------------------
+        zingchart.render({
+          id: 'myChart_total_deaths',
+          data: chartConfig,
+          height: '100%',
+          width: '100%',
+        });
+        }                
 
         function buildIndiaChart(){
             ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
