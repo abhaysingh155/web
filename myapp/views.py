@@ -142,7 +142,7 @@ def countries(request):
 
 def make_graph(request, pk_country="India"):
 	name=CountriesName.objects.filter(name=pk_country)
-	get_data = CountriesData.objects.filter(country_name=pk_country).order_by('-updated_at')
+	get_data = CountriesData.objects.filter(country_name=pk_country).order_by('updated_at')
 	state_data = {i['state'].replace(" ",""):i['confirmed'] for i in StateData.objects.all().order_by('-updated_on').values()}
 	try:
 		total_confirmed = get_data.values()[0]["total_confirmed"]
