@@ -35,7 +35,7 @@ class ChartData(APIView):
 	permission_classes = []
 
 	def get(self, request, pk_country, format=None):
-		get_data = CountriesData.objects.filter(country_name=pk_country)
+		get_data = CountriesData.objects.filter(country_name=pk_country).order_by('-updated_at')
 		x_axis = [i['updated_at'].strftime("%d %b %Y <br> %H:%M:%S") for i in get_data.values()]
 		today_confirmed_series = [int(i['today_confirmed']) for i in get_data.values()]
 		total_deaths_series = [int(i['total_deaths']) for i in get_data.values()]
@@ -142,7 +142,7 @@ def countries(request):
 
 def make_graph(request, pk_country="India"):
 	name=CountriesName.objects.filter(name=pk_country)
-	get_data = CountriesData.objects.filter(country_name=pk_country).order_by('updated_at')
+	get_data = CountriesData.objects.filter(country_name=pk_country).order_by('-updated_at')
 	state_data = {i['state'].replace(" ",""):i['confirmed'] for i in StateData.objects.all().order_by('-updated_on').values()}
 	try:
 		total_confirmed = get_data.values()[0]["total_confirmed"]
